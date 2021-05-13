@@ -1,5 +1,7 @@
 package src;
 
+import java.util.*;
+
 /** 
   * @author Jayesh Mudliyar
   */
@@ -8,6 +10,7 @@ public class LinkedHash {
     private StockList values[]; // stores linked lists of stocks
     private int size; // size of the values array;
     private final int CAPACITY = 100;
+    public int fileNumber = 0;
 
     public LinkedHash() {
         this.values = new StockList[this.CAPACITY];
@@ -26,7 +29,7 @@ public class LinkedHash {
         int asciiSum = 0;
         // calculates sum of all ascii values in a word (symbol in this case) 
         for (int index = 0; index < symbol.length(); index++) {
-            asciiSum += (int) ((char) symbol.charAt(i));
+            asciiSum += (int) ((char) symbol.charAt(index));
         }
         return asciiSum % this.CAPACITY;
     }
@@ -36,11 +39,25 @@ public class LinkedHash {
             return;
         }
         int index = hash(stock.getSymbol()); // gets index from hash function
-        this.values[index].update(stock); // updates or adds stock in a list
+        // updates or adds stock in a list
+        this.values[index].update(stock, fileNumber); 
     }
 
+    public void display() {
+        for (int i = 0; i < this.CAPACITY; i++) {
+            if (this.values[i] == null) {
+                System.out.printf("at %d - NULL\n", i);
+                continue;
+            }
+            System.out.printf("at %d - ", i);
+            for (int j = 0; j < this.values[i].size; j++) {
+                Stock temp = this.values[i].items.get(j);
+                System.out.printf(" { %s } ", temp.getSymbol());
+            }
+            System.out.println();
+        }
+    }
 }
-
 
 class StockList {
     public LinkedList<Stock> items; // stores stocks with same hash values
@@ -54,7 +71,7 @@ class StockList {
     /* checks if stock is already inserted, if yes then updates range
        else adds the stock to the list;
        returns true is everything went fine else false */
-    public boolean update(Stock stock) {
+    public boolean update(Stock stock, int fileNumber) {
         if (stock == null) {
             return false;
         }
@@ -66,8 +83,9 @@ class StockList {
             index++;
         }
         if (index < this.items.size()) { // if stock is already in list, update
-            double temp = this.items.get(index).getRange() + stock.getRange();
-            this.items.get(index).setRange(temp);
+            double temp = this.items.get(index).getRange(fileNumber) 
+                + stock.getRange(fileNumber);
+            this.items.get(index).setRange(fileNumber, temp);
         } else { //  stock is new to list, add stock to list
             this.items.add(stock);
             this.size++;
@@ -75,20 +93,5 @@ class StockList {
         return true;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
 
