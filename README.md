@@ -19,8 +19,8 @@ $ javac *.java
 compile with package 
 $ javac -d . *.java
 
-mention filenames with full path, e.g., /home/Documents/filename.csv
-$ java src.StockRange <filepath1> <filepath2> .... <filepathN>
+mention filenames with full path, 
+$ java src.StockRange filepath1 filepath2 .... filepathN
 
 example: 
 java src.StockRange ~/Downloads/cm29JAN2020bhav.csv ~/Downloads/cm30JAN2020bhav.csv ~/Downloads/cm31JAN2020bhav.csv
