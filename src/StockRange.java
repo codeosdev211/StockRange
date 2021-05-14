@@ -8,11 +8,9 @@ import java.io.*;
   */
 
 public class StockRange {
-    private final static String resultFile = "Stock.csv";
 
     public static void main(String args[]) {
         FileReader fileReader = null; 
-        FileWriter fileWriter = null;
         BufferedReader buffReader = null; 
         String eachLine = ""; // string for each line from a file
         int lineCount = 0; // total number of files
@@ -22,7 +20,6 @@ public class StockRange {
         Stock stock = null; // stock model object
         LinkedHash hashTable = new LinkedHash(); // linked hash table  
         try {
-            fileWriter = new FileWriter(resultFile); 
             // reading filenames one by one from arguments
             for (int index = 0; index < args.length; index++) {
                 fileReader = new FileReader(args[index]); 
@@ -41,8 +38,7 @@ public class StockRange {
                 hashTable.fileNumber++;
                 fileReader.close();
             }
-            hashTable.display();
-            fileWriter.close();
+            hashTable.writeTable();
         } catch (Exception error) {
             System.out.println("ERR-> " +error.getMessage());
         }

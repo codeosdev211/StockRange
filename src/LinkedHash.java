@@ -1,6 +1,7 @@
 package src;
 
 import java.util.*;
+import java.io.*;
 
 /** 
   * @author Jayesh Mudliyar
@@ -57,6 +58,33 @@ public class LinkedHash {
             System.out.println();
         }
     }
+
+    public void writeTable() throws Exception {
+        FileWriter writer = new FileWriter("Stocks.csv");
+        writer.write("TIMESTAMP,SYMBOL,RANGE,RUNNING_TOTAL\n");
+        String line = "";
+        double range = 0.0;
+        for (int row = 0; row < this.CAPACITY; row++) {
+           if (this.values[row] == null) {
+              continue;
+           } 
+           for (int stk = 0; stk < this.values[row].size; stk++) {
+               Stock temp = this.values[row].items.get(stk);
+               line = "";
+               range = 0.0;
+               for (int each = 0; each < this.fileNumber; each++) {
+                   range += temp.getRange(each);
+                   line = temp.getTimeStamp(each) + "," + 
+                       temp.getSymbol() + "," + 
+                       temp.getRange(each) + "," +
+                       range + "\n";
+                   writer.write(line);
+               }
+           }
+        }
+        writer.close();
+    }
+
 }
 
 class StockList {
@@ -78,18 +106,16 @@ class StockList {
         int index = 0;
         while (index < this.size) {
             if (this.items.get(index).getSymbol().equals(stock.getSymbol())) {
-                break;
+                this.items.get(index).setRange(fileNumber, 
+                        stock.getRange(0));
+                this.items.get(index).setTimeStamp(fileNumber, 
+                        stock.getTimeStamp(0));
+                return true;
             }
             index++;
         }
-        if (index < this.items.size()) { // if stock is already in list, update
-            double temp = this.items.get(index).getRange(fileNumber) 
-                + stock.getRange(fileNumber);
-            this.items.get(index).setRange(fileNumber, temp);
-        } else { //  stock is new to list, add stock to list
-            this.items.add(stock);
-            this.size++;
-        }
+        this.items.add(stock);
+        this.size++;
         return true;
     }
 }
