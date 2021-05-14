@@ -25,6 +25,7 @@ public class StockRange {
                 fileReader = new FileReader(args[index]); 
                 buffReader = new BufferedReader(fileReader);
                 columnNames = buffReader.readLine().split(","); 
+                // loop through each line of a file
                 while ((eachLine = buffReader.readLine()) != null) {
                     columnValues = eachLine.split(",");
                     stock = new Stock(args.length);
@@ -43,15 +44,6 @@ public class StockRange {
             System.out.println("ERR-> " +error.getMessage());
         }
     }
-
-    public static String listToString(String values[], String character) {
-        String result = "";
-        for (int index = 0; index < values.length; index++) {
-            result += values[index] + character;
-        }
-        return result;
-    }
-
 }
 
 

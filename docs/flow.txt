@@ -1,0 +1,15 @@
+This file explains the flow of the application:
+
+(1) run application from command line with filenames as arguments
+(2) the file names are looped through one by one
+(3) while looping in (2), each line of the file is read 
+(4) the lines then are split into array by ","
+(5) Stock object is initialized and loaded with information from the split line 
+(6) the object is pushed into the hashtable
+(7) while doing (6), collisions are checked and resolved by using a linked list
+(8) when (7), a check for duplication is performed and if found the updates the 
+    value else adds a new one to the linked list
+(9) after performing the above steps for all files, ouput file is created
+(10) application exits
+
+

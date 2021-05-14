@@ -11,7 +11,7 @@ public class LinkedHash {
     private StockList values[]; // stores linked lists of stocks
     private int size; // size of the values array;
     private final int CAPACITY = 100;
-    public int fileNumber = 0;
+    public int fileNumber = 0; 
 
     public LinkedHash() {
         this.values = new StockList[this.CAPACITY];
@@ -45,18 +45,21 @@ public class LinkedHash {
     }
 
     public void writeTable() throws Exception {
-        FileWriter writer = new FileWriter("Stocks.csv");
+        FileWriter writer = new FileWriter("SRange.csv");
         writer.write("TIMESTAMP,SYMBOL,RANGE,RUNNING_TOTAL\n");
         String line = "";
         double range = 0.0;
+        // loop through hash table
         for (int row = 0; row < this.CAPACITY; row++) {
            if (this.values[row] == null) {
               continue;
            } 
+           // loop through stock list
            for (int stk = 0; stk < this.values[row].size; stk++) {
                Stock temp = this.values[row].items.get(stk);
                line = "";
                range = 0.0;
+               // loop through stock ranges for each time stamp
                for (int each = 0; each < this.fileNumber; each++) {
                    if (temp.getTimeStamp(each) == null) {
                        continue;
