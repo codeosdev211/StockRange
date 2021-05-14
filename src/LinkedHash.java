@@ -41,22 +41,7 @@ public class LinkedHash {
         }
         int index = hash(stock.getSymbol()); // gets index from hash function
         // updates or adds stock in a list
-        this.values[index].update(stock, fileNumber); 
-    }
-
-    public void display() {
-        for (int i = 0; i < this.CAPACITY; i++) {
-            if (this.values[i] == null) {
-                System.out.printf("at %d - NULL\n", i);
-                continue;
-            }
-            System.out.printf("at %d - ", i);
-            for (int j = 0; j < this.values[i].size; j++) {
-                Stock temp = this.values[i].items.get(j);
-                System.out.printf(" { %s } ", temp.getSymbol());
-            }
-            System.out.println();
-        }
+        this.values[index].update(stock, fileNumber);
     }
 
     public void writeTable() throws Exception {
@@ -73,6 +58,9 @@ public class LinkedHash {
                line = "";
                range = 0.0;
                for (int each = 0; each < this.fileNumber; each++) {
+                   if (temp.getTimeStamp(each) == null) {
+                       continue;
+                   }
                    range += temp.getRange(each);
                    line = temp.getTimeStamp(each) + "," + 
                        temp.getSymbol() + "," + 
@@ -90,10 +78,12 @@ public class LinkedHash {
 class StockList {
     public LinkedList<Stock> items; // stores stocks with same hash values
     public int size; // size of the linked list of stocks
+    private int prevFileNum;
 
     public StockList() {
         this.items = new LinkedList<Stock>();
         this.size = 0;
+        this.prevFileNum = 0;
     }
 
     /* checks if stock is already inserted, if yes then updates range
@@ -106,8 +96,15 @@ class StockList {
         int index = 0;
         while (index < this.size) {
             if (this.items.get(index).getSymbol().equals(stock.getSymbol())) {
-                this.items.get(index).setRange(fileNumber, 
-                        stock.getRange(0));
+                double temp = this.items.get(index).getRange(prevFileNum);
+                if (prevFileNum == fileNumber) {
+                    temp += stock.getRange(0);
+                    this.items.get(index).setRange(fileNumber, temp);
+                } else {
+                    this.items.get(index).setRange(fileNumber, 
+                            stock.getRange(0));
+                    this.prevFileNum++;
+                }
                 this.items.get(index).setTimeStamp(fileNumber, 
                         stock.getTimeStamp(0));
                 return true;
